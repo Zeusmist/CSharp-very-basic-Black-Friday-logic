@@ -1,0 +1,11 @@
+C:\Users\david\source\repos\BlackFriday\BlackFriday\bin\Debug\netcoreapp2.1\BlackFriday.deps.json
+C:\Users\david\source\repos\BlackFriday\BlackFriday\bin\Debug\netcoreapp2.1\BlackFriday.runtimeconfig.json
+C:\Users\david\source\repos\BlackFriday\BlackFriday\bin\Debug\netcoreapp2.1\BlackFriday.runtimeconfig.dev.json
+C:\Users\david\source\repos\BlackFriday\BlackFriday\bin\Debug\netcoreapp2.1\BlackFriday.dll
+C:\Users\david\source\repos\BlackFriday\BlackFriday\bin\Debug\netcoreapp2.1\BlackFriday.pdb
+C:\Users\david\source\repos\BlackFriday\BlackFriday\obj\Debug\netcoreapp2.1\BlackFriday.csprojAssemblyReference.cache
+C:\Users\david\source\repos\BlackFriday\BlackFriday\obj\Debug\netcoreapp2.1\BlackFriday.csproj.CoreCompileInputs.cache
+C:\Users\david\source\repos\BlackFriday\BlackFriday\obj\Debug\netcoreapp2.1\BlackFriday.AssemblyInfoInputs.cache
+C:\Users\david\source\repos\BlackFriday\BlackFriday\obj\Debug\netcoreapp2.1\BlackFriday.AssemblyInfo.cs
+C:\Users\david\source\repos\BlackFriday\BlackFriday\obj\Debug\netcoreapp2.1\BlackFriday.dll
+C:\Users\david\source\repos\BlackFriday\BlackFriday\obj\Debug\netcoreapp2.1\BlackFriday.pdb
