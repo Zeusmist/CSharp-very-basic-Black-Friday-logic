@@ -1,143 +1,130 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BlackFriday
 {
     class Program
     {
+        static DateTime today = DateTime.Today;
+        static List<Deal> deals = new List<Deal>();
+        static List<Category> categories = new List<Category>();
+        static List<int> fridays = new List<int> { 04, 11, 18, 25 };
+
+        static void Main(string[] args)
+        {
+            /*
+             * Black friday program to display discounted products on specific black fridays.
+             * If day is not a black friday. No sale can be made.
+            */
+
+
+            /* Initialize categories */
+            createCategories();
+
+            /* Initialize deals */
+            createDeals();
+
+            Console.WriteLine("\tWELCOME TO ZEUS DECEMBER FRIDAY\n");
+
+            Console.WriteLine("---------------------------------------------------------");
+            Console.WriteLine("|\t\tDate - Category - Discount\t\t|");
+            Console.WriteLine("---------------------------------------------------------");
+
+            foreach (var deal in deals)
+            {
+                Console.WriteLine($"|\t{deal.DayOfMonth.ToLongDateString()} - {deal.Category} - {deal.PercentageOff}% Off\t|");
+            }
+            Console.WriteLine("---------------------------------------------------------");
+
+            Console.WriteLine($"\n\nToday is {today.ToString("D")}");
+            CheckForNextFriday(today.Day);
+            //CheckForNextFriday(11);
+        }
+
+        static void createCategories()
+        {
+            /*
+             * create different Category objects using static values, 
+             * then add them all to categories property
+            */
+
+            var category1 = new Category("Food & Nutrition");
+            category1.addProduct("Rice", 1000, 950);
+            category1.addProduct("Beans", 1500, 1425);
+            var category2 = new Category("Clothings & Acc");
+            category2.addProduct("Clothe1", 1000, 900);
+            category2.addProduct("Clothe2", 1500, 1350);
+            var category3 = new Category("Electronics");
+            category3.addProduct("Elect1", 1000, 850);
+            category3.addProduct("Elect2", 1500, 1275);
+            var category4 = new Category("Home & Office");
+            category4.addProduct("Home1", 1000, 800);
+            category4.addProduct("Home2", 1500, 1200);
+
+            categories.AddRange(new List<Category> { category1, category2, category3, category4 });
+        }
+        static void createDeals()
+        {
+            /*
+             * For each category add a Deal to deals property
+            */
+
+            int percentage = 5; /* Initial percentageOff */
+
+            for(int i = 0; i < categories.Count; i++)
+            {
+                deals.Add(new Deal(fridays[i], categories[i].name, percentage * (i + 1)));
+            }
+        }
         static void CheckForNextFriday(int today)
         {
-            int[] fridays = { 04, 11, 18, 25 };
-            int nextFriday = 0;
-            bool todayIsFriday = false;
+            /* Check for next black friday */
 
-            foreach(int i in fridays)
+            var allBlackFridays = new List<int>();
+            foreach (var deal in deals)
             {
-                if (today == i)
+                allBlackFridays.Add(deal.DayOfMonth.Day);
+            }
+
+            /* Find the next friday closest to today  */
+            IEnumerable<int> nf = allBlackFridays.OrderBy(x => Math.Abs((int)x - today));
+            int nextFriday = nf.ToArray()[1];
+            
+            bool todayIsFriday = false;
+            foreach (int friday in allBlackFridays)
+            {
+                if (today == friday)
                 {
                     nextFriday = today;
                     todayIsFriday = true;
                 }
             }
-
-            if(nextFriday == 0)
-            {
-                //nextFriday = fridays.MinBy(x => Math.Abs((long)x - targetNumber));
-                nextFriday = today < 04 ? 04 : today > 04 && today < 11 ? 11 : today > 11 && today < 18 ? 18 : 25;
-            }
             if (todayIsFriday)
             {
-                Console.WriteLine("Discounts are live today, Todays Discount is {0} on {1} items", today == 04 ? "5%" : today == 11 ? "10%" : today == 18 ? "15%" : "20%", today == 04 ? "Food & Nutrition" : today == 11 ? "Clothings & Accessories" : today == 18 ? "Electronics" : "Home & Office");
-                Console.WriteLine("\n");
-                displayProducts(today);
+                var todaysDeal = deals[deals.FindIndex((i) => i.DayOfMonth.Day == today)];
+                int percent = todaysDeal.PercentageOff;
+                string category = todaysDeal.Category;
 
-            } else
+                Console.WriteLine($"Discounts are live today, Todays Discount is {percent}% on {category}\n");
+                displayProducts(today);
+            }
+            else
             {
                 Console.WriteLine("No discounts today, Come back on " + nextFriday);
             }
-
         }
-
-        static void displayProducts(int friday)
+        static void displayProducts(int day)
         {
-            Categories categoriesObj = new Categories();
-            categoriesObj.setCategories();
+            var todaysDeal = deals.FindIndex((i) => i.DayOfMonth.Day == day);
+
             Console.WriteLine("Produt name\t\tProduct Price\t\tDiscount Price");
-            if(friday == 04)
+            Console.WriteLine("--------------------------------------------------------------");
+
+            foreach(var product in categories[todaysDeal].Products)
             {
-                foreach (Product i in categoriesObj.Food)
-                {
-                    Console.WriteLine("{0}\t\t\t{1}\t\t\t{2}", i.name, i.price, i.discount);
-                }
-            }
-            if (friday == 11)
-            {
-                foreach (Product i in categoriesObj.Clothes)
-                {
-                    Console.WriteLine("{0}\t\t\t{1}\t\t\t{2}", i.name, i.price, i.discount);
-                }
-            }
-            if (friday == 18)
-            {
-                foreach (Product i in categoriesObj.Electronics)
-                {
-                    Console.WriteLine("{0}\t\t\t{1}\t\t\t{2}", i.name, i.price, i.discount);
-                }
-            }
-            if (friday == 25)
-            {
-                foreach (Product i in categoriesObj.Home)
-                {
-                    Console.WriteLine("{0}\t\t\t{1}\t\t\t{2}", i.name, i.price, i.discount);
-                }
+                Console.WriteLine($"{product.name}\t\t\t{product.price}\t\t\t{product.discount}");
             }
         }
-        static void Main(string[] args)
-        {
-
-            DateTime today = DateTime.Today;
-            Friday objFriday = new Friday();
-            Console.WriteLine("\t\t\t\tWELCOME TO ZEUS DECEMBER FRIDAY\t\t\t\t\n\n");
-            Console.WriteLine("\t\tList of Fridays, Categories and Discounts\t\t");
-            Console.WriteLine("{0} - Food & Nutrition - 5% 0ff", objFriday.getFriday(2020, 12, 4));
-            Console.WriteLine("{0} - Clothings & Accessories - 10% 0ff", objFriday.getFriday(2020, 12, 11));
-            Console.WriteLine("{0} - Electronics - 15% 0ff", objFriday.getFriday(2020, 12, 18));
-            Console.WriteLine("{0} - Home & Office - 20% 0ff\n\n", objFriday.getFriday(2020, 12, 25));
-
-            Console.WriteLine("Today is " + today.ToString("D") + "\n");
-            //CheckForNextFriday(today.Day);
-            CheckForNextFriday(11);
-
-
-        }
     }
-
-    public class Product
-    {
-        public string name;
-        public int price;
-        public int discount;
-        public void SetInfo(string name, int price, int discount)
-        {
-            this.name = name;
-            this.price = price;
-            this.discount = discount;
-        }
-    }
-
-    class Categories
-    {
-        public Product[] Food = new Product[2];
-        public Product[] Clothes = new Product[2];
-        public Product[] Electronics = new Product[2];
-        public Product[] Home = new Product[2];
-        public void setCategories()
-        {
-            Food[0] = new Product();
-            Food[1] = new Product();
-            Food[0].SetInfo("Rice", 1000, 950);
-            Food[1].SetInfo("Beans", 1500, 1425);
-            Clothes[0] = new Product();
-            Clothes[1] = new Product();
-            Clothes[0].SetInfo("Clothe1", 1000, 900);
-            Clothes[1].SetInfo("Clothe2", 1500, 1350);
-            Electronics[0] = new Product();
-            Electronics[1] = new Product();
-            Electronics[0].SetInfo("Elect1", 1000, 850);
-            Electronics[1].SetInfo("Elect2", 1500, 1275);
-            Home[0] = new Product();
-            Home[1] = new Product();
-            Home[0].SetInfo("Home1", 1000, 800);
-            Home[1].SetInfo("Home2", 1500, 1200);
-        }
-    }
-
-    class Friday
-    {
-        public string getFriday(int year, int month, int day)
-        {
-            DateTime date = new DateTime(year, month, day);
-            return date.ToLongDateString();
-        }
-    }
-    
 }
