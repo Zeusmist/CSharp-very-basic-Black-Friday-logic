@@ -7,30 +7,22 @@ namespace BlackFriday
     class Category
     {
         /* A category has a name and a list of products */
-        public string name { get; set; }
-        public List<Product> Products = new List<Product>();
-
-        public Category(string name)
-        {
-            this.name = name;
-        }
-
-        public void addProduct(string name, int price, int discount)
-        {
-            Products.Add(new Product(name, price, discount));
-        }
-    }
-
-    class Product
-    {
+        public int code;
         public string name;
-        public int price;
-        public int discount;
-        public Product(string name, int price, int discount)
+        public List<Product> Products = new List<Product>();
+        public int percentageOff = 0;
+
+        public Category(int code, string name)
         {
+            this.code = code;
             this.name = name;
-            this.price = price;
-            this.discount = discount;
         }
+
+        public void addProduct(int code, string name, int price)
+        {
+            Products.Add(new Product(code , name, price));
+        }
+
+
     }
 }
